@@ -1,6 +1,3 @@
-# ci-tests
-Sanity and regression testing with CI/CD jenkins
-
 # CI Automated Sanity & Regression Testing
 
 ## 🔹 Purpose
@@ -37,4 +34,3 @@ pytest tests/test_regression.py --html=reports/regression.html --self-contained-
 - Automated test execution in CI
 - HTML reports in Jenkins
 - Faster feedback on build health
-
