@@ -1,6 +1,6 @@
 # tests/test_sanity_homepage.py
 # testing for pushing changes
-#pipeline testing
+#pipeline testing2
 from pages.home_page import HomePage
 
 def test_homepage_title(driver):
