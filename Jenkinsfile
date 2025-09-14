@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        VENV_DIR = 'venv'
+        REPORT_DIR = 'reports'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,27 +15,38 @@ pipeline {
 
         stage('Setup Python Env') {
             steps {
-                sh 'python3 -m venv venv'
-                sh '. venv/bin/activate && pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv ${VENV_DIR}
+                    ${VENV_DIR}/bin/pip install --upgrade pip
+                    ${VENV_DIR}/bin/pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Sanity Tests') {
             steps {
-                sh '. venv/bin/activate && pytest tests/test_sanity.py --html=reports/sanity_report.html --self-contained-html'
+                sh '''
+                    mkdir -p ${REPORT_DIR}
+                    ${VENV_DIR}/bin/python -m pytest tests/test_sanity.py \
+                    --html=${REPORT_DIR}/sanity_report.html --self-contained-html
+                '''
             }
         }
 
         stage('Run Regression Tests') {
             steps {
-                sh '. venv/bin/activate && pytest tests/test_regression.py --html=reports/regression_report.html --self-contained-html'
+                sh '''
+                    mkdir -p ${REPORT_DIR}
+                    ${VENV_DIR}/bin/python -m pytest tests/test_regression.py \
+                    --html=${REPORT_DIR}/regression_report.html --self-contained-html
+                '''
             }
         }
 
         stage('Publish Reports') {
             steps {
                 publishHTML([
-                    reportDir: 'reports',
+                    reportDir: "${REPORT_DIR}",
                     reportFiles: 'sanity_report.html,regression_report.html',
                     reportName: 'Test Reports'
                 ])
@@ -56,7 +72,7 @@ pipeline {
             )
         }
         always {
-            archiveArtifacts artifacts: 'reports/*.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: "${REPORT_DIR}/*.html", allowEmptyArchive: true
         }
     }
 }
