@@ -45,11 +45,12 @@ pipeline {
 
         stage('Publish Reports') {
             steps {
-                publishHTML([
+              sh '''  publishHTML([
                     reportDir: "${REPORT_DIR}",
                     reportFiles: 'sanity_report.html,regression_report.html',
                     reportName: 'Test Reports'
                 ])
+                '''
             }
         }
     }
