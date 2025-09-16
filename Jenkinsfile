@@ -58,19 +58,21 @@ pipeline {
     post {
         success {
             slackSend(channel: '#ci-pipeline', message: "✅ Build SUCCESS: ${env.JOB_NAME} [${env.BUILD_NUMBER}]")
-            emailext(
+           sh ''' emailext(
                 subject: "✅ SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: "Build succeeded.\nCheck Jenkins for reports.",
                 to: "aashimabhardwaj18@gmail.com"
-            )
+            ) 
+            '''
         }
         failure {
             slackSend(channel: '#ci-pipeline', message: "❌ Build FAILED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]")
-            emailext(
+           sh ''' emailext(
                 subject: "❌ FAILURE: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: "Build failed.\nCheck Jenkins logs.",
                 to: "aashimabhardwaj18@gmail.com"
             )
+            '''
         }
         always {
             archiveArtifacts artifacts: "${REPORT_DIR}/*.html", allowEmptyArchive: true
