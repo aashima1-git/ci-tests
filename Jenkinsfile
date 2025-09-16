@@ -61,7 +61,7 @@ pipeline {
             emailext(
                 subject: "✅ SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: "Build succeeded.\nCheck Jenkins for reports.",
-                to: "team@example.com"
+                to: "aashimabhardwaj18@gmail.com"
             )
         }
         failure {
@@ -69,7 +69,7 @@ pipeline {
             emailext(
                 subject: "❌ FAILURE: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: "Build failed.\nCheck Jenkins logs.",
-                to: "team@example.com"
+                to: "aashimabhardwaj18@gmail.com"
             )
         }
         always {
